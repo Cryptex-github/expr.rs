@@ -1,0 +1,28 @@
+[package]
+name = "expr_rs"
+authors = ["Cryptex"]
+description = " A safe and simple math evaluator for Rust and Python."
+repository = "https://github.com/Cryptex-github/expr.rs"
+keywords = ["math", "evaluator", "safe", "fast", "rust", "python"]
+categories = ["command-line-utlilities", "parsing"]
+license = "MIT"
+version = "0.0.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "expr"
+path = "src/bin/expr.rs"
+
+[lib]
+name = "expr_rs"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+chumsky = "0.8"
+pyo3 = { version = "0.16.4", features = ["extension-module"], optional = true }
+rust_decimal = { version = "1.23", features = ["maths"] }
+
+[features]
+python = ["dep:pyo3"]
