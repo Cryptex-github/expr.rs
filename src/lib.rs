@@ -16,11 +16,11 @@ use pyo3::exceptions::PyRuntimeError;
 use pyo3::prelude::*;
 
 
-/// Evaluate a string, returns the result as String
+/// Evaluate a string, returns the result as ``f64``
 /// 
 /// # Errors
 /// 
-/// This function will return an Error if the string is not a valid expression
+/// This function will return an Error as ``String`` if the string is not a valid expression
 /// or it overflowed f64 or i64.
 /// 
 /// # Examples
