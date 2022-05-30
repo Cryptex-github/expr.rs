@@ -1,5 +1,7 @@
 # expr.rs
- A safe and simple math evaluator for Rust.
+A safe and simple math evaluator for Rust.
+
+Rust rewrite of [expr.py](https://github.com/jay3332/expr.py)
 
 ## Features
 Basic operations such as 
