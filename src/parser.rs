@@ -1,11 +1,9 @@
-use chumsky::prelude::*;
 use crate::ast::Token;
+use chumsky::prelude::*;
 
 pub fn parser() -> impl Parser<char, Token, Error = Simple<char>> {
     recursive(|expr| {
-        let int = text::int(10)
-            .map(Token::Number)
-            .padded();
+        let int = text::int(10).map(Token::Number).padded();
 
         let float = text::int::<_, Simple<char>>(10)
             .then_ignore(just('.'))

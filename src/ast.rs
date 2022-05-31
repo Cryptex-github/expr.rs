@@ -20,25 +20,34 @@ pub enum Token {
 impl Token {
     pub fn eval(&self) -> Result<Decimal, Error> {
         match self {
-            Self::Number(n) => Ok(Decimal::from_i64(
-                (*n).parse::<i64>().map_err(Error::ParseIntError)?,
-            )
-            .ok_or_else(|| Error::ConversionError(
-                "Cannot convert to Decimal".to_string(),
-            ))?),
-            Self::Float(n) => Ok(Decimal::from_f64(
-                (*n).parse::<f64>().map_err(Error::ParseFloatError)?,
-            )
-            .ok_or_else(|| Error::ConversionError(
-                "Cannot convert to Decimal".to_string(),
-            ))?),
+            Self::Number(n) | Self::Float(n) => {
+                Ok(Decimal::from_str(&*n).map_err(Error::DecimalConversionError)?)
+            }
             Self::Neg(n) => Ok(-n.eval()?),
-            Self::Add(a, b) => Ok(a.eval()? + b.eval()?),
-            Self::Sub(a, b) => Ok(a.eval()? - b.eval()?),
-            Self::Mul(a, b) => Ok(a.eval()? * b.eval()?),
-            Self::Div(a, b) => Ok(a.eval()? / b.eval()?),
-            Self::Mod(a, b) => Ok(a.eval()? % b.eval()?),
-            Self::Pow(a, b) => Ok(a.eval()?.powd(b.eval()?)),
+            Self::Add(a, b) => Ok(a
+                .eval()?
+                .checked_add(b.eval()?)
+                .ok_or(Error::OperationError)?),
+            Self::Sub(a, b) => Ok(a
+                .eval()?
+                .checked_sub(b.eval()?)
+                .ok_or(Error::OperationError)?),
+            Self::Mul(a, b) => Ok(a
+                .eval()?
+                .checked_mul(b.eval()?)
+                .ok_or(Error::OperationError)?),
+            Self::Div(a, b) => Ok(a
+                .eval()?
+                .checked_div(b.eval()?)
+                .ok_or(Error::OperationError)?),
+            Self::Mod(a, b) => Ok(a
+                .eval()?
+                .checked_rem(b.eval()?)
+                .ok_or(Error::OperationError)?),
+            Self::Pow(a, b) => Ok(a
+                .eval()?
+                .checked_powd(b.eval()?)
+                .ok_or(Error::OperationError)?),
             Self::Factorial(n) => Ok(factorial(&(**n).eval()?)?),
         }
     }

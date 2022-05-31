@@ -2,11 +2,10 @@
 
 mod ast;
 pub mod error;
-mod parser;
 mod formulas;
+mod parser;
 
 use chumsky::prelude::Parser;
-use rust_decimal::prelude::ToPrimitive;
 
 use parser::parser;
 
@@ -15,29 +14,26 @@ use pyo3::exceptions::PyRuntimeError;
 #[cfg(feature = "python")]
 use pyo3::prelude::*;
 
-
-/// Evaluate a string, returns the result as ``f64``
-/// 
+/// Evaluate a string, returns the result as ``rust_decimal::Decimal``.
+///
 /// # Errors
-/// 
+///
 /// This function will return an Error as ``String`` if the string is not a valid expression
-/// or it overflowed f64 or i64.
-/// 
+/// or it overflowed ``79_228_162_514_264_337_593_543_950_335``.
+///
 /// # Examples
-/// 
+///
 /// ``` rust
 /// use expr_rs::eval;
-/// 
+///
 /// println!("{}", eval("1+2").unwrap());
 /// ```
-pub fn eval(expr: &str) -> Result<f64, String> {
+pub fn eval(expr: &str) -> Result<rust_decimal::Decimal, String> {
     let res = parser()
         .parse(expr)
         .map_err(|e| e.into_iter().map(|e| e.to_string()).collect::<String>())?
         .eval()
-        .map_err(|e| format!("Evaluation error: {}", e))?
-        .to_f64()
-        .ok_or_else(|| "Cannot convert to f64".to_string())?;
+        .map_err(|e| format!("Evaluation error: {}", e))?;
 
     Ok(res)
 }
