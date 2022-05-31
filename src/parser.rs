@@ -10,8 +10,8 @@ pub fn parser() -> impl Parser<char, Token, Error = Simple<char>> {
             .then(text::int(10))
             .map(|(s, d)| Token::Float(format!("{}.{}", s, d)));
 
-        let fact = int
-            .or(float)
+        let fact = float
+            .or(int)
             .then_ignore(just('!'))
             .map(|n| Token::Factorial(Box::new(n)));
 

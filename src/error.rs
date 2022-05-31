@@ -1,7 +1,4 @@
-use std::{
-    fmt::Display,
-    num::{ParseFloatError, ParseIntError},
-};
+use std::fmt::Display;
 
 const EVAL_APPEND: &str = "\n\nAborting evaluation due to previous error.";
 
@@ -9,8 +6,7 @@ const EVAL_APPEND: &str = "\n\nAborting evaluation due to previous error.";
 pub enum Error {
     ConversionError(String),
     DecimalConversionError(rust_decimal::Error),
-    ParseIntError(ParseIntError),
-    ParseFloatError(ParseFloatError),
+    FactorialFloatNotSupportedError,
     OperationError,
 }
 
@@ -22,13 +18,10 @@ impl Display for Error {
             }
             Error::DecimalConversionError(e) => {
                 write!(f, "Decimal conversion error: {}{}", e, EVAL_APPEND)
-            }
-            Error::ParseIntError(e) => {
-                write!(f, "Parse int error: {}{}", e, EVAL_APPEND)
-            }
-            Error::ParseFloatError(e) => {
-                write!(f, "Parse float error: {}{}", e, EVAL_APPEND)
-            }
+            },
+            Error::FactorialFloatNotSupportedError => {
+                write!(f, "Calculating factorial for number with decimal place is currently not supported{}", EVAL_APPEND)
+            },
             Error::OperationError => write!(
                 f,
                 "Operation error: Value overflowed or underflowed while calculating{}",
