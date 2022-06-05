@@ -2,7 +2,7 @@ use rust_decimal::{prelude::ToPrimitive, Decimal};
 
 use crate::error::Error;
 
-pub fn factorial(d: &Decimal) -> Result<Decimal, Error> {
+pub fn factorial(d: Decimal) -> Result<Decimal, Error> {
     let n = d.to_u8().ok_or_else(
         || Error::ConversionError(
             "Failed to convert Decimal to u8 while calculating factorial, this is done to minimize the chance of overflow"

@@ -29,13 +29,11 @@ use pyo3::prelude::*;
 /// println!("{}", eval("1+2").unwrap());
 /// ```
 pub fn eval(expr: &str) -> Result<rust_decimal::Decimal, String> {
-    let res = parser()
+    Ok(parser()
         .parse(expr)
         .map_err(|e| e.into_iter().map(|e| e.to_string()).collect::<String>())?
         .eval()
-        .map_err(|e| format!("Evaluation error: {}", e))?;
-
-    Ok(res)
+        .map_err(|e| format!("Evaluation error: {}", e))?)
 }
 
 #[cfg(feature = "python")]

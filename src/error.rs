@@ -18,10 +18,10 @@ impl Display for Error {
             }
             Error::DecimalConversionError(e) => {
                 write!(f, "Decimal conversion error: {}{}", e, EVAL_APPEND)
-            },
+            }
             Error::FactorialFloatNotSupportedError => {
                 write!(f, "Calculating factorial for number with decimal place is currently not supported{}", EVAL_APPEND)
-            },
+            }
             Error::OperationError => write!(
                 f,
                 "Operation error: Value overflowed or underflowed while calculating{}",
