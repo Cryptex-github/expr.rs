@@ -12,11 +12,11 @@ pub fn factorial(d: Decimal) -> Result<Decimal, Error> {
     if n < 1 {
         Err(Error::FactorialFloatNotSupportedError)
     } else if n == 1 {
-        Ok(Decimal::from(1_u8))
+        Ok(Decimal::ONE)
     } else if n == 2 {
-        Ok(Decimal::from(2_u8))
+        Ok(Decimal::TWO)
     } else {
-        let mut res = Decimal::from(1_u8);
+        let mut res = Decimal::ONE;
 
         for i in 1..=n {
             res = res

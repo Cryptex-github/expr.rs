@@ -17,6 +17,15 @@ pub enum Token {
     Factorial(Box<Token>), // Left value
 }
 
+macro_rules! operation {
+    ($a:ident, $b:ident, $op:ident) => {
+        $a
+            .eval()?
+            .$op($b.eval()?)
+            .ok_or(Error::OperationError)?
+    };
+}
+
 impl Token {
     pub fn eval(&self) -> Result<Decimal, Error> {
         Ok(match self {
@@ -24,30 +33,12 @@ impl Token {
                 Decimal::from_str(&*n).map_err(Error::DecimalConversionError)?
             }
             Self::Neg(n) => -n.eval()?,
-            Self::Add(a, b) => a
-                .eval()?
-                .checked_add(b.eval()?)
-                .ok_or(Error::OperationError)?,
-            Self::Sub(a, b) => a
-                .eval()?
-                .checked_sub(b.eval()?)
-                .ok_or(Error::OperationError)?,
-            Self::Mul(a, b) => a
-                .eval()?
-                .checked_mul(b.eval()?)
-                .ok_or(Error::OperationError)?,
-            Self::Div(a, b) => a
-                .eval()?
-                .checked_div(b.eval()?)
-                .ok_or(Error::OperationError)?,
-            Self::Mod(a, b) => a
-                .eval()?
-                .checked_rem(b.eval()?)
-                .ok_or(Error::OperationError)?,
-            Self::Pow(a, b) => a
-                .eval()?
-                .checked_powd(b.eval()?)
-                .ok_or(Error::OperationError)?,
+            Self::Add(a, b) => operation!(a, b, checked_add),
+            Self::Sub(a, b) => operation!(a, b, checked_sub),
+            Self::Mul(a, b) => operation!(a, b, checked_mul),
+            Self::Div(a, b) => operation!(a, b, checked_div),
+            Self::Mod(a, b) => operation!(a, b, checked_rem),
+            Self::Pow(a, b) => operation!(a, b, checked_powd),
             Self::Factorial(n) => factorial((**n).eval()?)?,
         })
     }
