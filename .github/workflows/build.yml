@@ -44,5 +44,3 @@ jobs:
     steps:
     - name: Run clippy
       run: cargo clippy --all-features -- -D clippy::all -D clippy::pedantic -D clippy::nursery -D clippy::cargo
-    
-    
