@@ -9,9 +9,9 @@ pub fn factorial(d: Decimal) -> Result<Decimal, Error> {
             .to_string()
     ))?;
 
-    if n < 1 {
+    if n < 0 {
         Err(Error::FactorialFloatNotSupportedError)
-    } else if n == 1 {
+    } else if n == 0 || n == 1 {
         Ok(Decimal::ONE)
     } else if n == 2 {
         Ok(Decimal::TWO)
